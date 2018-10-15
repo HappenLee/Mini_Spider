@@ -1,3 +1,15 @@
+################################################################################
+#
+# Copyright (c) 2018 Baidu.com, Inc. All Rights Reserved
+#
+################################################################################
+"""
+This module provide MiniSpider Class to crawl url data .
+
+Authors: lihaopeng(lihaopeng@baidu.com)
+Date:    2018/10/06 17:23:06
+"""
+
 import configparser
 import re
 import logging
@@ -13,20 +25,28 @@ from urllib import request
 
 
 class MiniSpider:
-    """Summary of class here.
+    """
+    Summary of class here.
 
-        MiniSpider is a class to load conf from local and
-        crawl url by re.
+    MiniSpider is a class to load conf from local and crawl url by re.
 
-        Attributes:
-            header: Camouflage browser head to crawl url
-            loger: To log the info of the class.
-            conf: Load the conf from local and crawl url by conf
-            urls: A queue for crawl task
-            threads: A list contains the thread to crawl url
+    Attributes:
+        header: Camouflage browser head to crawl url
+        loger: To log the info of the class.
+        conf: Load the conf from local and crawl url by conf
+        urls: A queue for crawl task
+        threads: A list contains the thread to crawl url
     """
 
     def __init__(self, conf_path):
+        """
+        Init the mini_spider by conf.
+
+        Args:
+            conf_path: A str of the path of conf
+        Returns:
+            object of mini_spider
+        """
         self.header = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
 
         log_fmt = '%(asctime)s\tFile \"%(filename)s\",line %(lineno)s\t%(levelname)s: %(message)s'
@@ -80,6 +100,15 @@ class MiniSpider:
         return None
 
     def find_links(self, url, html):
+        """
+        Find the correct link we need by re.
+
+        Args:
+            url: A str of the url be crawled.
+            html: The html data of the url.
+        Returns:
+            links: A iterator of links consistent with regular expression rules.
+        """
         href_links = re.findall(r'href=["\'](.*?)["|\']', html)
         src_links = re.findall(r'src=["\'](.*?)["|\']', html)
         links = href_links + src_links
@@ -91,6 +120,12 @@ class MiniSpider:
         return links
 
     def crawl(self):
+        """
+        crawl fuction execute by thread.
+
+        Raises:
+            Exception: All the probable exception of crawl.
+        """
         self.loger.info(threading.current_thread().getName() + " start")
         crawl_faild_time = 0
         while crawl_faild_time < 3:
@@ -131,6 +166,15 @@ class MiniSpider:
 
 
     def download(self, link, html):
+        """
+        Download the html of target link to local disk.
+
+        Args:
+            link: A str of the target link.
+            html: The html data of the target link.
+        Returns:
+            bool: The bool value of whether the html data already downloaf.
+        """
         file_path = self.conf["output_directory"] + "/" + link.replace(r"/", r"\\")
         if (os.path.exists(file_path)):
             self.loger.info("%s is already download" % (file_path))
@@ -141,6 +185,10 @@ class MiniSpider:
         return False
 
     def start(self):
+        """
+        Start all the thread of the mini_spider to crawl the target link.
+
+        """
         self.loger.info("start spider")
         for thread in self.threads:
             thread.start()
