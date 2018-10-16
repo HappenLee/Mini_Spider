@@ -1,15 +1,3 @@
-################################################################################
-#
-# Copyright (c) 2018 Baidu.com, Inc. All Rights Reserved
-#
-################################################################################
-"""
-This module is unittest for Mini_Spider.
-
-Authors: lihaopeng(lihaopeng@baidu.com)
-Date:    2018/10/09 08:23:06
-"""
-
 import os
 import re
 import unittest

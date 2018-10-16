@@ -1,15 +1,3 @@
-################################################################################
-#
-# Copyright (c) 2018 Baidu.com, Inc. All Rights Reserved
-#
-################################################################################
-"""
-This module provide MiniSpider Class to crawl url data .
-
-Authors: lihaopeng(lihaopeng@baidu.com)
-Date:    2018/10/06 17:23:06
-"""
-
 import configparser
 import re
 import logging
